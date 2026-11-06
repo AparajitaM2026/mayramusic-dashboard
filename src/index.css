@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    color-scheme: dark;
     --background: 268 45% 7%;
     --foreground: 280 15% 96%;
     --card: 268 35% 12%;
@@ -44,6 +45,7 @@
   }
 
   .dark {
+    color-scheme: dark;
     --background: 268 45% 7%;
     --foreground: 280 15% 96%;
     --card: 268 35% 12%;
@@ -84,7 +86,28 @@
     @apply border-border outline-ring/50;
   }
 
+  html {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground font-body;
+    color-scheme: dark;
+  }
+
+  select {
+    color-scheme: dark !important;
+    background-color: hsl(var(--card)) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  select option {
+    background-color: #191026 !important;
+    color: #f8f5fc !important;
+  }
+
+  select option:checked {
+    background-color: #fbb01b !important;
+    color: #1a0f02 !important;
   }
 }
