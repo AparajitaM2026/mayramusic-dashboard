@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, limits: { fileSize: 500 * 1024 * 1024 } });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 
 process.on('uncaughtException', (err) => {
   console.warn('[Server] Uncaught exception (recovered):', err.message);
