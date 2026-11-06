@@ -57,7 +57,7 @@ app.use('/api/v1', v1Router);
 // Helper to get authenticated user from token
 async function getAuthUser(req) {
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.replace(/^Bearer\s+/i, '');
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
   if (!token) return null;
 
   const users = await db.list('User', '-created_date', 500, 0);
@@ -65,7 +65,7 @@ async function getAuthUser(req) {
     const userId = token.replace('local-token-', '');
     return users.find(u => u.id === userId) || null;
   }
-  return users[0] || null;
+  return null;
 }
 
 // ==========================================
@@ -92,10 +92,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/auth/me', async (req, res) => {
   const user = await getAuthUser(req);
   if (!user) {
-    const users = await db.list('User', '-created_date', 500, 0);
-    const defaultUser = users[0] || { id: 'user_admin_001', email: 'admin@ottm.com', role: 'admin', name: 'Admin User' };
-    const { password: _, ...userSafe } = defaultUser;
-    return res.json(userSafe);
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   const { password: _, ...userSafe } = user;
   return res.json(userSafe);
