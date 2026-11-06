@@ -67,10 +67,10 @@ export function PeriodFilterBar() {
   const { months, selected, setSelected } = usePeriodFilter();
   return (
     <div className="flex items-center gap-2 mb-5">
-      <Calendar className="w-4 h-4 text-slate-500" />
-      <span className="text-sm font-medium text-slate-700">{translate('common.statement_period')}</span>
+      <Calendar className="w-4 h-4 text-primary" />
+      <span className="text-sm font-medium text-foreground">{translate('common.statement_period')}</span>
       <Select value={selected} onValueChange={setSelected}>
-        <SelectTrigger className="w-56 h-8">
+        <SelectTrigger className="w-56 h-8 bg-card border-border text-foreground">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

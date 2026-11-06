@@ -154,11 +154,11 @@ export default function AllLabelsOverview() {
       {/* Vendor Filter */}
       {vendorOptions.length > 0 && (
         <div className="flex items-center gap-3 mb-6">
-          <span className="text-sm font-medium text-slate-600">{t('overview.vendor_filter')}:</span>
+          <span className="text-sm font-medium text-foreground">{t('overview.vendor_filter')}:</span>
           <select
             value={vendorFilter}
             onChange={(e) => setVendorFilter(e.target.value)}
-            className="h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="h-9 rounded-md border border-input bg-card text-foreground border-border px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             <option value="all">{t('overview.all_vendors')}</option>
             {vendorOptions.map((name) => (

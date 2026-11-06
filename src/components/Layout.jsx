@@ -123,13 +123,13 @@ export default function Layout() {
   return (
     <PeriodFilterProvider>
       <LogoUploadDialog open={logoOpen} onOpenChange={setLogoOpen} onSaved={setLogoUrl} partyId={partyId} />
-      <div className="min-h-screen flex bg-slate-50">
+      <div className="min-h-screen flex bg-background text-foreground">
         <aside
-          className={`fixed lg:static z-40 inset-y-0 ${isRTL ? 'right-0' : 'left-0'} w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-200 ${
+          className={`fixed lg:static z-40 inset-y-0 ${isRTL ? 'right-0' : 'left-0'} w-64 bg-sidebar text-sidebar-foreground border-e border-sidebar-border flex flex-col transition-transform duration-200 ${
             open ? 'translate-x-0' : isRTL ? 'translate-x-full' : '-translate-x-full'
           } lg:translate-x-0`}
         >
-          <div className="flex items-center gap-2 px-6 h-16 border-b border-slate-800">
+          <div className="flex items-center gap-2 px-6 h-16 border-b border-sidebar-border">
             <BrandLogo
               logoUrl={logoUrl}
               canEdit={canEditLogo}
@@ -146,8 +146,8 @@ export default function Layout() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
                     isActive
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'hover:bg-slate-800 hover:text-white'
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                   }`
                 }
               >
@@ -157,19 +157,19 @@ export default function Layout() {
             ))}
           </nav>
           <CatalogSearchStatus />
-          <div className="p-3 border-t border-slate-800">
+          <div className="p-3 border-t border-sidebar-border">
             <div className="px-1 pb-2">
               <LanguageSwitcher variant="dark" placement="up" />
             </div>
             <div className="px-3 py-2 text-xs">
-              <p className="text-slate-400 truncate">{user?.email}</p>
-              <span className="inline-block mt-1 text-[10px] uppercase tracking-wide bg-slate-800 text-slate-300 px-2 py-0.5 rounded">
+              <p className="text-muted-foreground truncate">{user?.email}</p>
+              <span className="inline-block mt-1 text-[10px] uppercase tracking-wide bg-sidebar-accent text-sidebar-foreground px-2 py-0.5 rounded">
                 {getAccessRole(user) || user?.role}
               </span>
             </div>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-slate-800 hover:text-white"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
               <LogOut className="w-4 h-4" /> {t('nav.sign_out')}
             </button>
@@ -184,7 +184,7 @@ export default function Layout() {
         )}
 
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="lg:hidden flex items-center gap-3 h-14 px-4 bg-white border-b">
+          <header className="lg:hidden flex items-center gap-3 h-14 px-4 bg-card border-b border-border">
             <button onClick={() => setOpen(true)}>
               <Menu className="w-5 h-5" />
             </button>
