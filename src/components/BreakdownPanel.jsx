@@ -18,7 +18,7 @@ import {
 import { useLanguage } from '@/lib/i18n';
 
 export default function BreakdownPanel({
-  data,
+  data = [],
   valueLabel = 'Revenue',
   formatValue,
   limit
@@ -27,19 +27,18 @@ export default function BreakdownPanel({
   const fmt = formatValue || ((v) => v);
   const storeLabels = { yt: 'YouTube' };
   const labelOf = (key) => storeLabels[String(key).toLowerCase()] || key;
-  const items = limit ? data.slice(0, limit) : data;
   
-  // Show clean, wide, solid bars for top 10 items to prevent dot-like crowded lines
+  const safeData = Array.isArray(data) ? data : [];
+  const items = limit ? safeData.slice(0, limit) : safeData;
   const chartItems = items.slice(0, 10);
-  const chartData = chartItems.map((d) => ({ name: String(labelOf(d.key)).slice(0, 18), value: d.value }));
-  const total = items.reduce((acc, d) => acc + (d.value || 0), 0);
+  const chartData = chartItems.map((d) => ({ name: String(labelOf(d?.key || '')).slice(0, 18), value: Number(d?.value) || 0 }));
+  const total = items.reduce((acc, d) => acc + (Number(d?.value) || 0), 0);
 
   return (
     <div className="grid lg:grid-cols-2 gap-6">
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
-            {/* Clean subtle horizontal grid line without vertical dot-dot pattern */}
             <CartesianGrid vertical={false} stroke="rgba(255, 255, 255, 0.08)" />
             <XAxis
               dataKey="name"
@@ -61,7 +60,6 @@ export default function BreakdownPanel({
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
               }}
             />
-            {/* Solid, thick, beautiful rounded bars like the track chart */}
             <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="#6366f1" maxBarSize={44} />
           </BarChart>
         </ResponsiveContainer>
@@ -76,16 +74,24 @@ export default function BreakdownPanel({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items.map((d) => {
-              const pct = total > 0 ? ((d.value / total) * 100).toFixed(1) : '0.0';
-              return (
-                <TableRow key={d.key}>
-                  <TableCell className="font-medium text-foreground">{labelOf(d.key)}</TableCell>
-                  <TableCell className="text-right text-foreground font-semibold">{fmt(d.value)}</TableCell>
-                  <TableCell className="text-right text-muted-foreground">{pct}%</TableCell>
-                </TableRow>
-              );
-            })}
+            {items.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+                  No data available for this period
+                </TableCell>
+              </TableRow>
+            ) : (
+              items.map((d) => {
+                const pct = total > 0 ? ((Number(d?.value || 0) / total) * 100).toFixed(1) : '0.0';
+                return (
+                  <TableRow key={d?.key || Math.random()}>
+                    <TableCell className="font-medium text-foreground">{labelOf(d?.key || '')}</TableCell>
+                    <TableCell className="text-right text-foreground font-semibold">{fmt(d?.value || 0)}</TableCell>
+                    <TableCell className="text-right text-muted-foreground">{pct}%</TableCell>
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </div>
