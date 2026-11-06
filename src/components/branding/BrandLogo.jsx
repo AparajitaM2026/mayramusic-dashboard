@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Disc3, Pencil } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Shows the dashboard logo of the current tenant: the uploaded company logo
-// when one is set, otherwise the default OTTMConnect lockup.
+// Shows the dashboard logo: Mayra Music branded lockup by default,
+// or a custom uploaded logo if configured.
 export default function BrandLogo({ logoUrl, canEdit, onClick, variant = 'dark', className }) {
   const isDark = variant === 'dark';
   const [imgError, setImgError] = useState(false);
@@ -13,27 +13,30 @@ export default function BrandLogo({ logoUrl, canEdit, onClick, variant = 'dark',
   }, [logoUrl]);
 
   return (
-    <div className={cn('flex items-center gap-2 min-w-0', className)}>
-      {logoUrl && !imgError ? (
+    <div className={cn('flex items-center gap-3 min-w-0', className)}>
+      <a 
+        href="https://mayramusic.in" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="flex items-center gap-2.5 group transition-opacity hover:opacity-90"
+        title="Visit Mayra Music Website (mayramusic.in)"
+      >
         <img
-          src={logoUrl}
-          alt="Dashboard logo"
+          src={(!imgError && logoUrl) ? logoUrl : "/mayra-logo.png"}
+          alt="Mayra Music Logo"
           onError={() => setImgError(true)}
-          className="h-9 max-w-[140px] object-contain shrink-0"
+          className="h-9 w-9 object-contain shrink-0 rounded-md"
         />
-      ) : (
-        <>
-          <Disc3 className="w-7 h-7 text-indigo-400 shrink-0" />
-          <span
-            className={cn(
-              'font-semibold text-lg tracking-tight truncate',
-              isDark ? 'text-white' : 'text-slate-900'
-            )}
-          >
-            OTTMConnect
+        <div className="flex flex-col min-w-0">
+          <span className="font-display font-bold text-base tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">
+            MAYRA
           </span>
-        </>
-      )}
+          <span className="text-[0.62rem] font-medium tracking-[0.28em] text-primary uppercase leading-none mt-1">
+            MUSIC
+          </span>
+        </div>
+      </a>
+
       {canEdit && (
         <button
           type="button"
@@ -41,10 +44,10 @@ export default function BrandLogo({ logoUrl, canEdit, onClick, variant = 'dark',
           title="Change logo"
           aria-label="Change logo"
           className={cn(
-            'shrink-0 rounded-md p-1.5 border transition',
+            'shrink-0 rounded-md p-1.5 border transition ms-1',
             isDark
-              ? 'border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
-              : 'border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-400'
+              ? 'border-border text-muted-foreground hover:text-foreground hover:border-primary/50'
+              : 'border-border text-muted-foreground hover:text-foreground hover:border-primary/50'
           )}
         >
           <Pencil className="w-3.5 h-3.5" />
