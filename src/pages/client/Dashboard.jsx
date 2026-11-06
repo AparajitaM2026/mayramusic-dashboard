@@ -114,7 +114,7 @@ export default function Dashboard() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthlyChart} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-slate-100" />
+                <CartesianGrid vertical={false} stroke="rgba(255, 255, 255, 0.08)" />
                 <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} width={70} />
                 <Tooltip formatter={(v) => formatCurrency(v)} />

@@ -125,7 +125,7 @@ export default function StoreRevenue() {
                 layout="vertical"
                 margin={{ left: 10, right: 30, top: 5, bottom: 5 }}
               >
-                <CartesianGrid horizontal={false} stroke="#e2e8f0" />
+                <CartesianGrid horizontal={false} stroke="rgba(255, 255, 255, 0.08)" />
                 <XAxis type="number" tickFormatter={(v) => `$${Number(v).toFixed(0)}`} tick={{ fontSize: 11 }} />
                 <YAxis
                   type="category"
