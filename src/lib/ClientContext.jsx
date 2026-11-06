@@ -139,11 +139,11 @@ export function ClientPreviewProvider() {
   return (
     <ClientContext.Provider value={value}>
       {superAdmin && allClients.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-indigo-200 bg-indigo-50/60 px-4 py-2.5">
-          <Eye className="w-4 h-4 text-indigo-600" />
-          <span className="text-sm font-medium text-indigo-900">Previewing client view as:</span>
+        <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-border/80 bg-card/80 backdrop-blur-md shadow-sm px-4 py-2.5">
+          <Eye className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-foreground font-semibold">Previewing client view as:</span>
           <Select value={previewId || ''} onValueChange={selectPreview}>
-            <SelectTrigger className="w-64 h-8 bg-white"><SelectValue placeholder="Select client" /></SelectTrigger>
+            <SelectTrigger className="w-64 h-8 bg-card border-border text-foreground font-medium"><SelectValue placeholder="Select client" /></SelectTrigger>
             <SelectContent>
               {allClients.map((c) => <SelectItem key={c.id} value={c.id}>{c.client_name}</SelectItem>)}
             </SelectContent>
@@ -151,11 +151,11 @@ export function ClientPreviewProvider() {
         </div>
       )}
       {partyAdmin && partyAccounts.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-indigo-200 bg-indigo-50/60 px-4 py-2.5">
-          <Layers className="w-4 h-4 text-indigo-600" />
-          <span className="text-sm font-medium text-indigo-900">Account:</span>
+        <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-border/80 bg-card/80 backdrop-blur-md shadow-sm px-4 py-2.5">
+          <Layers className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-foreground font-semibold">Account:</span>
           <Select value={selectedAccountId} onValueChange={selectAccount}>
-            <SelectTrigger className="w-72 h-8 bg-white"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-72 h-8 bg-card border-border text-foreground font-medium"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL}>All (Consolidated Party View)</SelectItem>
               {ownAccount && <SelectItem value={ownAccount.id}>Main Label (Self) — {ownAccount.client_name}</SelectItem>}

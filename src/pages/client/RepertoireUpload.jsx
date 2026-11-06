@@ -275,12 +275,12 @@ export default function RepertoireUpload() {
       />
 
       {editId && (
-        <div className="flex items-center justify-between p-3.5 mb-6 bg-indigo-50 border border-indigo-200 rounded-xl">
+        <div className="flex items-center justify-between p-3.5 mb-6 bg-card/80 border border-border/80 rounded-xl">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary font-semibold bg-indigo-100 px-2 py-0.5 rounded">
               Editing Draft / Release
             </span>
-            <span className="text-sm font-medium text-indigo-900">
+            <span className="text-sm font-medium text-foreground font-semibold">
               {form.release_title || 'Untitled Release'}
             </span>
           </div>
@@ -312,7 +312,7 @@ export default function RepertoireUpload() {
                 </span>
                 {label}
               </div>
-              {i < steps.length - 1 && <div className="w-8 h-px bg-slate-300" />}
+              {i < steps.length - 1 && <div className="w-8 h-px bg-border" />}
             </div>
           );
         })}
@@ -328,9 +328,9 @@ export default function RepertoireUpload() {
                 const Icon = TYPE_ICONS[type];
                 const isActive = form.release_type === type;
                 return (
-                  <button key={type} onClick={() => updateForm('release_type', type)} className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition ${isActive ? 'border-indigo-600 bg-indigo-50' : 'border-slate-200 hover:border-slate-300'}`}>
-                    <Icon className={`w-7 h-7 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
-                    <span className={`text-sm font-medium capitalize ${isActive ? 'text-indigo-700' : 'text-slate-600'}`}>{type}</span>
+                  <button key={type} onClick={() => updateForm('release_type', type)} className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition ${isActive ? 'border-primary bg-primary/15' : 'border-border bg-card/60 hover:border-primary/40'}`}>
+                    <Icon className={`w-7 h-7 ${isActive ? 'text-primary' : 'text-slate-400'}`} />
+                    <span className={`text-sm font-medium capitalize ${isActive ? 'text-primary font-semibold' : 'text-slate-600'}`}>{type}</span>
                   </button>
                 );
               })}
@@ -388,14 +388,14 @@ export default function RepertoireUpload() {
                   <button
                     type="button"
                     onClick={() => updateForm('upc_mode', 'own')}
-                    className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition text-left ${form.upc_mode === 'own' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 hover:border-slate-300 text-slate-600'}`}
+                    className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition text-left ${form.upc_mode === 'own' ? 'border-primary bg-primary/15 text-primary font-semibold' : 'border-border bg-card/60 hover:border-primary/40 text-muted-foreground'}`}
                   >
                     I have My Own UPC/EAN
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm({ ...form, upc_mode: 'none', upc_ean: '' })}
-                    className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition text-left ${form.upc_mode === 'none' ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-slate-200 hover:border-slate-300 text-slate-600'}`}
+                    className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition text-left ${form.upc_mode === 'none' ? 'border-primary bg-primary/15 text-primary font-semibold' : 'border-border bg-card/60 hover:border-primary/40 text-muted-foreground'}`}
                   >
                     I don't have a UPC
                   </button>
