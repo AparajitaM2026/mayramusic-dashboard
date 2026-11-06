@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Shows the dashboard logo: Mayra Music branded lockup by default,
-// or a custom uploaded logo if configured.
 export default function BrandLogo({ logoUrl, canEdit, onClick, variant = 'dark', className }) {
   const isDark = variant === 'dark';
   const [imgError, setImgError] = useState(false);
@@ -18,20 +16,20 @@ export default function BrandLogo({ logoUrl, canEdit, onClick, variant = 'dark',
         href="https://mayramusic.in" 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="flex items-center gap-2.5 group transition-opacity hover:opacity-90"
+        className="flex items-center gap-3 group transition-transform hover:scale-[1.02]"
         title="Visit Mayra Music Website (mayramusic.in)"
       >
         <img
           src={(!imgError && logoUrl) ? logoUrl : "/mayra-logo.png"}
           alt="Mayra Music Logo"
           onError={() => setImgError(true)}
-          className="h-9 w-9 object-contain shrink-0 rounded-md"
+          className="h-10 w-10 object-contain shrink-0 rounded-xl drop-shadow-md border border-white/10 p-0.5 bg-black/30"
         />
         <div className="flex flex-col min-w-0">
-          <span className="font-display font-bold text-base tracking-tight text-foreground leading-none group-hover:text-primary transition-colors">
+          <span className="font-display font-extrabold text-base tracking-tight leading-none bg-gradient-to-r from-amber-400 via-fuchsia-300 to-purple-400 bg-clip-text text-transparent">
             MAYRA
           </span>
-          <span className="text-[0.62rem] font-medium tracking-[0.28em] text-primary uppercase leading-none mt-1">
+          <span className="text-[0.62rem] font-bold tracking-[0.3em] uppercase leading-none mt-1 text-amber-400/90">
             MUSIC
           </span>
         </div>

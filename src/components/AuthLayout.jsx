@@ -8,9 +8,9 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
       <div className="absolute top-4 start-4 z-10">
         <a
           href="https://mayramusic.in"
-          className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-primary transition-colors bg-card/60 backdrop-blur-sm border border-border/80 px-3 py-1.5 rounded-full"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors bg-card/80 backdrop-blur-md border border-border/80 px-3.5 py-2 rounded-full shadow-sm hover:border-primary/40"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5 text-primary" />
           <span>Back to mayramusic.in</span>
         </a>
       </div>
@@ -19,25 +19,25 @@ export default function AuthLayout({ icon: Icon, title, subtitle, footer, childr
       </div>
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <a href="https://mayramusic.in" className="inline-flex items-center gap-3 mb-4 group">
+          <a href="https://mayramusic.in" className="inline-flex items-center gap-3.5 mb-5 group">
             <img
               src="/mayra-logo.png"
               alt="Mayra Music Logo"
-              className="w-12 h-12 object-contain rounded-xl drop-shadow group-hover:scale-105 transition-transform"
+              className="w-14 h-14 object-contain rounded-2xl drop-shadow-xl border border-white/10 p-1 bg-black/40 group-hover:scale-105 transition-transform"
             />
             <div className="text-start">
-              <span className="block font-display font-bold text-xl tracking-tight text-foreground leading-none">
+              <span className="block font-display font-extrabold text-2xl tracking-tight leading-none bg-gradient-to-r from-amber-400 via-fuchsia-300 to-purple-400 bg-clip-text text-transparent">
                 MAYRA
               </span>
-              <span className="block text-[0.68rem] font-medium tracking-[0.3em] text-primary uppercase leading-none mt-1">
+              <span className="block text-[0.72rem] font-bold tracking-[0.32em] text-amber-400/90 uppercase leading-none mt-1.5">
                 MUSIC
               </span>
             </div>
           </a>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground font-display">{title}</h1>
           {subtitle && <p className="text-muted-foreground text-sm mt-1.5">{subtitle}</p>}
         </div>
-        <div className="bg-card rounded-2xl shadow-xl border border-border/80 p-8 backdrop-blur-sm">
+        <div className="bg-card rounded-2xl shadow-2xl border border-border/80 p-8 backdrop-blur-md">
           {children}
         </div>
         {footer && (
