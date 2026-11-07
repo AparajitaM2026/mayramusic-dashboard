@@ -5,11 +5,20 @@ export const functions = {
   // Returns all distinct YYYY-MM statement periods from MonthlyAggregate / RevenueRow
   getStatementPeriods: async () => {
     try {
-      const aggregates = await db.list('MonthlyAggregate', '-report_month', 100, 0);
       const periodsSet = new Set();
+      const aggregates = await db.list('MonthlyAggregate', '-report_month', 100, 0);
       for (const a of aggregates) {
         if (a.report_month) periodsSet.add(a.report_month);
       }
+      try {
+        const revRes = await db.pool.query(
+          `SELECT DISTINCT data->>'report_month' as month FROM entity_revenuerow WHERE data->>'report_month' IS NOT NULL`
+        );
+        for (const r of revRes.rows) {
+          if (r.month) periodsSet.add(r.month);
+        }
+      } catch {}
+
       if (periodsSet.size > 0) {
         const sorted = Array.from(periodsSet).sort().reverse();
         return { periods: sorted };
@@ -223,6 +232,71 @@ export const functions = {
       }
     } catch {}
 
+    // ── Step 5: perTrack, perAlbum, perCaller breakdowns from RevenueRow
+    const perTrackMap = new Map();
+    const perAlbumMap = new Map();
+    const perCallerMap = new Map();
+
+    if (accountIds.length > 0) {
+      try {
+        const queryParams = [Array.from(targetAccountIds)];
+        let periodClause = '';
+        if (!all) {
+          queryParams.push(targetPeriod);
+          periodClause = `AND (data->>'report_month' = $2 OR data->>'statement_period' = $2)`;
+        }
+        const trackRes = await db.pool.query(
+          `SELECT 
+            COALESCE(data->>'isrc', '—') as isrc,
+            COALESCE(data->>'track_title', '—') as track_title,
+            COALESCE(data->>'artist_name', '—') as artist,
+            COALESCE(data->>'album_title', '—') as album_title,
+            COALESCE(data->>'caller_tune', '—') as caller_tune,
+            SUM((data->>'gross_revenue')::numeric) as gross,
+            SUM((data->>'units')::numeric) as units,
+            COUNT(*) as rows
+           FROM entity_revenuerow
+           WHERE (data->>'client_account_id' = ANY($1)) ${periodClause}
+           GROUP BY isrc, track_title, artist, album_title, caller_tune
+           ORDER BY gross DESC`,
+          queryParams
+        );
+        for (const r of trackRes.rows) {
+          const g = Math.round(Number(r.gross) * 100) / 100;
+          const u = Number(r.units) || 0;
+          const rw = Number(r.rows) || 0;
+          const key = r.isrc !== '—' ? r.isrc : r.track_title;
+          const existing = perTrackMap.get(key) || {
+            key: r.track_title,
+            isrc: r.isrc,
+            track_title: r.track_title,
+            artist: r.artist,
+            album_title: r.album_title,
+            gross: 0,
+            units: 0,
+            rows: 0
+          };
+          existing.gross += g;
+          existing.units += u;
+          existing.rows += rw;
+          perTrackMap.set(key, existing);
+
+          if (r.album_title && r.album_title !== '—') {
+            const alb = perAlbumMap.get(r.album_title) || { key: r.album_title, gross: 0, units: 0, rows: 0 };
+            alb.gross += g; alb.units += u; alb.rows += rw;
+            perAlbumMap.set(r.album_title, alb);
+          }
+          if (r.caller_tune && r.caller_tune !== '—') {
+            const cal = perCallerMap.get(r.caller_tune) || { key: r.caller_tune, gross: 0, units: 0, rows: 0 };
+            cal.gross += g; cal.units += u; cal.rows += rw;
+            perCallerMap.set(r.caller_tune, cal);
+          }
+        }
+      } catch (err) {
+        console.warn('[aggregateClientRevenue] perTrack error:', err.message);
+      }
+    }
+
     const dim = (m) => Array.from(m.values())
       .filter(v => v.gross > 0 || v.units > 0)
       .sort((a, b) => b.gross - a.gross);
@@ -236,9 +310,9 @@ export const functions = {
       monthly: Array.from(monthlyMap.values()).sort((a, b) => a.month.localeCompare(b.month)),
       perStore: dim(perStoreMap),
       perCountry: dim(perCountryMap),
-      perTrack: [],
-      perAlbum: [],
-      perCaller: []
+      perTrack: dim(perTrackMap),
+      perAlbum: dim(perAlbumMap),
+      perCaller: dim(perCallerMap)
     };
   },
 
