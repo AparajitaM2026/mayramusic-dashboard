@@ -880,9 +880,7 @@ export const functions = {
     };
   },
 
-  updatePartyLogo: async ({ logo_url, party_id }, reqUser) => {
-    const rawUrl = typeof logo_url === 'string' ? logo_url.trim() : '';
-
+  updatePartyLogo: async ({ logo_url, brand_name, name, party_id }, reqUser) => {
     let partyId = party_id || reqUser?.party_id || reqUser?.data?.party_id;
 
     if (!partyId) {
@@ -912,7 +910,21 @@ export const functions = {
       throw new Error('Party not found');
     }
 
-    const updated = await db.update('Party', party.id, { logo_url: rawUrl });
-    return { ok: true, party_id: party.id, logo_url: updated?.logo_url ?? rawUrl };
+    const updates = {};
+    if (logo_url !== undefined) {
+      updates.logo_url = typeof logo_url === 'string' ? logo_url.trim() : '';
+    }
+    const newName = brand_name || name;
+    if (newName && typeof newName === 'string' && newName.trim()) {
+      updates.name = newName.trim();
+    }
+
+    const updated = await db.update('Party', party.id, updates);
+    return { 
+      ok: true, 
+      party_id: party.id, 
+      logo_url: updated?.logo_url ?? party.logo_url,
+      name: updated?.name ?? party.name
+    };
   }
 };

@@ -90,6 +90,7 @@ export default function Layout() {
   const { t, isRTL } = useLanguage();
   const [open, setOpen] = useState(false);
   const [logoUrl, setLogoUrl] = useState('');
+  const [brandName, setBrandName] = useState('Mayra Music');
   const [logoOpen, setLogoOpen] = useState(false);
   const nav = isSuperAdmin(user) ? adminNav : isPartyAdmin(user) ? partyAdminNav : clientNav;
   // Only the Super Admin and a Party Admin may replace the logo; everyone else
@@ -106,7 +107,10 @@ export default function Layout() {
     base44.entities.Party
       .get(partyId)
       .then((party) => {
-        if (active) setLogoUrl(party?.logo_url || '');
+        if (active) {
+          setLogoUrl(party?.logo_url || '');
+          if (party?.name) setBrandName(party.name);
+        }
       })
       .catch(() => {
         if (active) setLogoUrl('');
@@ -122,7 +126,17 @@ export default function Layout() {
 
   return (
     <PeriodFilterProvider>
-      <LogoUploadDialog open={logoOpen} onOpenChange={setLogoOpen} onSaved={setLogoUrl} partyId={partyId} />
+      <LogoUploadDialog 
+        open={logoOpen} 
+        onOpenChange={setLogoOpen} 
+        onSaved={({ logoUrl: newLogo, name: newName }) => {
+          if (newLogo !== undefined) setLogoUrl(newLogo);
+          if (newName) setBrandName(newName);
+        }} 
+        currentLogoUrl={logoUrl}
+        currentBrandName={brandName}
+        partyId={partyId} 
+      />
       <div className="min-h-screen flex bg-background text-foreground">
         <aside
           className={`fixed lg:static z-40 inset-y-0 ${isRTL ? 'right-0' : 'left-0'} w-64 bg-sidebar text-sidebar-foreground border-e border-sidebar-border flex flex-col transition-transform duration-200 ${
@@ -132,6 +146,7 @@ export default function Layout() {
           <div className="flex items-center gap-2 px-6 h-16 border-b border-sidebar-border">
             <BrandLogo
               logoUrl={logoUrl}
+              brandName={brandName}
               canEdit={canEditLogo}
               onClick={() => setLogoOpen(true)}
               variant="dark"
