@@ -404,7 +404,7 @@ export default function RepertoireUpload() {
                   <Input value={form.upc_ean} onChange={(e) => updateForm('upc_ean', e.target.value)} placeholder="Enter your UPC/EAN" className="font-mono" />
                 )}
                 {form.upc_mode === 'none' && (
-                  <p className="text-xs text-slate-500 italic">OTT Arabia will create a UPC on your behalf and update it once the release is live.</p>
+                  <p className="text-xs text-slate-500 italic">Mayra Music will create a UPC on your behalf and update it once the release is live.</p>
                 )}
               </div>
             </div>

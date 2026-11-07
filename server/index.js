@@ -28,6 +28,8 @@ const upload = multer({ storage, limits: { fileSize: 500 * 1024 * 1024 } });
 
 const app = express();
 const PORT = process.env.PORT || 5005;
+const MAYRA_PARTY_ID = process.env.MAYRA_PARTY_ID || 'party_1794033080621_ix3po';
+const MAYRA_MAIN_ACCOUNT_ID = 'clientaccount_1794033136877_e9eqj';
 
 process.on('uncaughtException', (err) => {
   console.warn('[Server] Uncaught exception (recovered):', err.message);
@@ -128,7 +130,10 @@ app.post('/api/auth/register', async (req, res) => {
     email,
     password: password || 'password123',
     name: name || email.split('@')[0],
-    role: role || 'user'
+    role: role || 'user',
+    party_id: MAYRA_PARTY_ID,
+    access_role: 'CLIENT_USER',
+    client_account_id: MAYRA_MAIN_ACCOUNT_ID
   });
 
   const token = `local-token-${newUser.id}`;
@@ -182,18 +187,41 @@ app.get([
 });
 
 // ==========================================
-// 3. Entity Generic CRUD Routes
+// 3. Entity Generic CRUD Routes (Scoped to Mayra Music)
 // ==========================================
 app.get('/api/entities/:entity', async (req, res) => {
   const { entity } = req.params;
   const { sort, limit, skip } = req.query;
+
+  if (entity === 'ClientAccount') {
+    const results = await db.filter('ClientAccount', { party_id: MAYRA_PARTY_ID }, sort, limit, skip);
+    return res.json(results);
+  }
+  if (entity === 'User') {
+    const results = await db.filter('User', { party_id: MAYRA_PARTY_ID }, sort, limit, skip);
+    return res.json(results);
+  }
+  if (entity === 'Party') {
+    const party = await db.get('Party', MAYRA_PARTY_ID);
+    return res.json(party ? [party] : []);
+  }
+
   const results = await db.list(entity, sort, limit, skip);
   return res.json(results);
 });
 
 app.post('/api/entities/:entity/filter', async (req, res) => {
   const { entity } = req.params;
-  const { query, sort, limit, skip } = req.body;
+  const { query = {}, sort, limit, skip } = req.body;
+
+  if (entity === 'ClientAccount') {
+    query.party_id = MAYRA_PARTY_ID;
+  } else if (entity === 'User') {
+    query.party_id = MAYRA_PARTY_ID;
+  } else if (entity === 'Party') {
+    query.id = MAYRA_PARTY_ID;
+  }
+
   const results = await db.filter(entity, query, sort, limit, skip);
   return res.json(results);
 });
@@ -209,6 +237,12 @@ app.post('/api/entities/:entity', async (req, res) => {
   const { entity } = req.params;
   const payload = { ...req.body };
 
+  if (entity === 'ClientAccount') {
+    payload.party_id = MAYRA_PARTY_ID;
+  }
+  if (entity === 'User') {
+    payload.party_id = MAYRA_PARTY_ID;
+  }
   if (entity === 'Vendor') {
     payload.name = payload.name || payload.vendor_name;
     payload.vendor_name = payload.vendor_name || payload.name;

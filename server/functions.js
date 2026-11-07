@@ -589,28 +589,15 @@ export const functions = {
     return { exists: true, is_verified: true };
   },
 
-  // List users in the caller's party (PARTY_ADMIN) or all users (SUPER_ADMIN)
+  // List users in the Mayra Music party
   listPartyUsers: async (payload, reqUser) => {
     if (!reqUser) throw new Error('Unauthorized');
-    const accessRole = reqUser.access_role;
-    const isSuper = reqUser.role === 'admin' || accessRole === 'SUPER_ADMIN';
-    const isPartyAdmin = accessRole === 'PARTY_ADMIN';
+    const targetPartyId = process.env.MAYRA_PARTY_ID || 'party_1794033080621_ix3po';
 
-    if (!isSuper && !isPartyAdmin) throw new Error('Forbidden — admin only');
-
-    let users, allClients;
-    if (isPartyAdmin) {
-      if (!reqUser.party_id) throw new Error('Your account is not linked to a party.');
-      [users, allClients] = await Promise.all([
-        db.filter('User', { party_id: reqUser.party_id }, '-created_date', 500, 0),
-        db.filter('ClientAccount', { party_id: reqUser.party_id }, '-created_date', 500, 0)
-      ]);
-    } else {
-      [users, allClients] = await Promise.all([
-        db.list('User', '-created_date', 500, 0),
-        db.list('ClientAccount', '-created_date', 500, 0)
-      ]);
-    }
+    const [users, allClients] = await Promise.all([
+      db.filter('User', { party_id: targetPartyId }, '-created_date', 500, 0),
+      db.filter('ClientAccount', { party_id: targetPartyId }, '-created_date', 500, 0)
+    ]);
 
     const emailToClient = new Map();
     for (const c of allClients) {

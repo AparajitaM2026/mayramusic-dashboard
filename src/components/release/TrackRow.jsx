@@ -88,7 +88,7 @@ export default function TrackRow({ index, track, onChange, onRemove }) {
               <Input value={track.isrc || ''} onChange={(e) => update('isrc', e.target.value)} className="h-8 text-sm font-mono" placeholder="Enter your ISRC" />
             )}
             {track.isrc_mode === 'none' && (
-              <p className="text-xs text-slate-500 italic">OTT Arabia will assign an ISRC on your behalf.</p>
+              <p className="text-xs text-slate-500 italic">Mayra Music will assign an ISRC on your behalf.</p>
             )}
           </div>
         </div>
