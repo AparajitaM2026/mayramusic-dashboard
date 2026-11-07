@@ -144,14 +144,14 @@ export default function RepertoireUpload() {
   if (loading || loadingEdit) {
     return (
       <div className="flex flex-col items-center justify-center py-20 space-y-3">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
-        {loadingEdit && <p className="text-sm text-slate-500">Loading release details...</p>}
+        <div className="w-8 h-8 border-4 border-primary/50 border-t-indigo-600 rounded-full animate-spin" />
+        {loadingEdit && <p className="text-sm text-muted-foreground">Loading release details...</p>}
       </div>
     );
   }
 
   if (!clientAccount) {
-    return <Card className="p-8 text-center text-slate-500">{t('common.no_account')}</Card>;
+    return <Card className="p-8 text-center text-muted-foreground">{t('common.no_account')}</Card>;
   }
 
   const updateForm = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -289,7 +289,7 @@ export default function RepertoireUpload() {
             size="sm"
             variant="ghost"
             onClick={() => navigate('/client/repertoire/upload')}
-            className="text-xs text-slate-600 hover:text-slate-900 h-7"
+            className="text-xs text-foreground font-medium hover:text-slate-900 h-7"
           >
             Cancel & Upload New
           </Button>
@@ -306,7 +306,7 @@ export default function RepertoireUpload() {
           const isDone = step > stepNum;
           return (
             <div key={i} className="flex items-center gap-2">
-              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${isActive ? 'bg-indigo-600 text-white' : isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${isActive ? 'bg-indigo-600 text-white' : isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-muted-foreground'}`}>
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${isActive ? 'bg-white/20' : isDone ? 'bg-emerald-500 text-white' : 'bg-slate-200'}`}>
                   {isDone ? <Check className="w-3 h-3" /> : stepNum}
                 </span>
@@ -330,7 +330,7 @@ export default function RepertoireUpload() {
                 return (
                   <button key={type} onClick={() => updateForm('release_type', type)} className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition ${isActive ? 'border-primary bg-primary/15' : 'border-border bg-card/60 hover:border-primary/40'}`}>
                     <Icon className={`w-7 h-7 ${isActive ? 'text-primary' : 'text-slate-400'}`} />
-                    <span className={`text-sm font-medium capitalize ${isActive ? 'text-primary font-semibold' : 'text-slate-600'}`}>{type}</span>
+                    <span className={`text-sm font-medium capitalize ${isActive ? 'text-primary font-semibold' : 'text-foreground font-medium'}`}>{type}</span>
                   </button>
                 );
               })}
@@ -404,7 +404,7 @@ export default function RepertoireUpload() {
                   <Input value={form.upc_ean} onChange={(e) => updateForm('upc_ean', e.target.value)} placeholder="Enter your UPC/EAN" className="font-mono" />
                 )}
                 {form.upc_mode === 'none' && (
-                  <p className="text-xs text-slate-500 italic">Mayra Music will create a UPC on your behalf and update it once the release is live.</p>
+                  <p className="text-xs text-muted-foreground italic">Mayra Music will create a UPC on your behalf and update it once the release is live.</p>
                 )}
               </div>
             </div>
@@ -430,7 +430,7 @@ export default function RepertoireUpload() {
       {step === 2 && (
         <Card className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-500">Add track-level details and upload audio files. Number of tracks should match your release type (Single: 1, EP: 2-6, Album: 7+).</p>
+            <p className="text-sm text-muted-foreground">Add track-level details and upload audio files. Number of tracks should match your release type (Single: 1, EP: 2-6, Album: 7+).</p>
           </div>
           {tracks.map((track, i) => (
             <TrackRow key={i} index={i} track={track} onChange={updateTrack} onRemove={removeTrack} />
@@ -463,19 +463,19 @@ export default function RepertoireUpload() {
           <div>
             <Label className="text-sm font-semibold mb-2 block">Artwork File (JPG/PNG, min 3000×3000px)</Label>
             <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-slate-300 cursor-pointer hover:bg-slate-50 text-sm">
+              <label className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-border/80 cursor-pointer bg-card/40 hover:bg-card/70 text-foreground text-sm font-medium transition">
                 {artworkUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 <span>{form.artwork_url ? 'Replace Artwork' : 'Upload Artwork'}</span>
                 <input type="file" accept=".jpg,.jpeg,.png" className="hidden" onChange={handleArtworkUpload} disabled={artworkUploading} />
               </label>
-              {form.artwork_filename && !artworkUploading && <span className="text-xs text-slate-500">{form.artwork_filename}</span>}
+              {form.artwork_filename && !artworkUploading && <span className="text-xs text-muted-foreground">{form.artwork_filename}</span>}
             </div>
             {artworkUploading && (
               <div className="flex items-center gap-2 mt-2">
                 <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden max-w-xs">
                   <div className="h-full bg-indigo-600 rounded-full transition-all duration-200" style={{ width: `${artworkProgress}%` }} />
                 </div>
-                <span className="text-xs text-slate-500 tabular-nums">{artworkProgress}%</span>
+                <span className="text-xs text-muted-foreground tabular-nums">{artworkProgress}%</span>
               </div>
             )}
             {form.artwork_url && <img src={form.artwork_url} alt="Artwork preview" className="mt-3 w-32 h-32 rounded-lg object-cover border" />}
@@ -509,25 +509,25 @@ export default function RepertoireUpload() {
           )}
 
           {/* Review summary */}
-          <div className="rounded-lg bg-slate-50 border p-4 space-y-1 text-sm">
-            <p className="font-semibold text-slate-700 mb-2">Review Summary</p>
-            <p><span className="text-slate-500">Title:</span> {form.release_title}</p>
-            <p><span className="text-slate-500">Type:</span> <span className="uppercase">{form.release_type}</span></p>
-            <p><span className="text-slate-500">Artist:</span> {form.artist_name}</p>
-            <p><span className="text-slate-500">Genre:</span> {form.primary_genre || '—'} {form.sub_genre ? `/ ${form.sub_genre}` : ''}</p>
-            <p><span className="text-slate-500">Release Date:</span> {form.release_date || '—'}</p>
-            <p><span className="text-slate-500">Tracks:</span> {tracks.length}</p>
+          <div className="rounded-xl bg-card/60 border border-border/80 p-5 space-y-2 text-sm">
+            <p className="font-semibold text-foreground mb-2 text-base">Review Summary</p>
+            <p><span className="text-muted-foreground">Title:</span> {form.release_title}</p>
+            <p><span className="text-muted-foreground">Type:</span> <span className="uppercase">{form.release_type}</span></p>
+            <p><span className="text-muted-foreground">Artist:</span> {form.artist_name}</p>
+            <p><span className="text-muted-foreground">Genre:</span> {form.primary_genre || '—'} {form.sub_genre ? `/ ${form.sub_genre}` : ''}</p>
+            <p><span className="text-muted-foreground">Release Date:</span> {form.release_date || '—'}</p>
+            <p><span className="text-muted-foreground">Tracks:</span> {tracks.length}</p>
             {tracks.map((tr, i) => (
-              <div key={i} className={tracks.length > 1 ? 'mt-1 pl-2 border-l-2 border-slate-200' : ''}>
-                {tracks.length > 1 && <p className="font-medium text-slate-600">{tr.title}</p>}
-                <p><span className="text-slate-500">Primary Artist(s):</span> {(tr.artists || []).map((a) => a.name).filter(Boolean).join(', ') || '—'}</p>
-                <p><span className="text-slate-500">Spotify:</span> {(tr.artists || []).filter((a) => a.spotify_artist_url).length}/{(tr.artists || []).length} linked</p>
-                <p><span className="text-slate-500">Composers:</span> {tr.composers || '—'}</p>
-                <p><span className="text-slate-500">Lyricists:</span> {tr.lyricists || '—'}</p>
+              <div key={i} className={tracks.length > 1 ? 'mt-1 pl-2 border-l-2 border-primary/50' : ''}>
+                {tracks.length > 1 && <p className="font-medium text-foreground font-medium">{tr.title}</p>}
+                <p><span className="text-muted-foreground">Primary Artist(s):</span> {(tr.artists || []).map((a) => a.name).filter(Boolean).join(', ') || '—'}</p>
+                <p><span className="text-muted-foreground">Spotify:</span> {(tr.artists || []).filter((a) => a.spotify_artist_url).length}/{(tr.artists || []).length} linked</p>
+                <p><span className="text-muted-foreground">Composers:</span> {tr.composers || '—'}</p>
+                <p><span className="text-muted-foreground">Lyricists:</span> {tr.lyricists || '—'}</p>
               </div>
             ))}
-            <p><span className="text-slate-500">Artwork:</span> {form.artwork_url ? '✓ Uploaded' : '✗ Missing'}</p>
-            <p><span className="text-slate-500">Audio files:</span> {tracks.filter((tr) => tr.audio_url).length}/{tracks.length} uploaded</p>
+            <p><span className="text-muted-foreground">Artwork:</span> {form.artwork_url ? '✓ Uploaded' : '✗ Missing'}</p>
+            <p><span className="text-muted-foreground">Audio files:</span> {tracks.filter((tr) => tr.audio_url).length}/{tracks.length} uploaded</p>
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
