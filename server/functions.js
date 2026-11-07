@@ -106,16 +106,6 @@ export const functions = {
             }
           }
         }
-
-        // 1d. Also include any child sub-label accounts under these parent accounts
-        const subRes = await db.pool.query(
-          `SELECT id, data->>'client_name' as name FROM entity_clientaccount WHERE data->>'parent_client_account_id' = ANY($1)`,
-          [accountIds]
-        );
-        for (const row of subRes.rows) {
-          targetAccountIds.add(row.id);
-          if (row.name) targetImprints.add(row.name.trim().toLowerCase());
-        }
       } catch (e) {
         console.warn('[aggregateClientRevenue] imprint lookup error:', e.message);
       }
