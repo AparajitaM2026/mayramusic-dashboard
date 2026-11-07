@@ -72,7 +72,7 @@ const AuthenticatedApp = () => {
     <Routes>
       {/* Public authentication pages */}
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/register" element={<Navigate to="/login" replace />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/otp" element={<Otp />} />
       <Route path="/reset-password" element={<ResetPassword />} />

@@ -52,9 +52,9 @@ export default function Otp() {
         title="Verify your email"
         subtitle="Enter the code we sent you"
         footer={
-          <Link to="/register" className="text-primary font-medium hover:underline">
+          <Link to="/login" className="text-primary font-medium hover:underline">
             <ArrowLeft className="w-3 h-3 inline mr-1" />
-            Back to sign up
+            Back to log in
           </Link>
         }
       >
@@ -71,9 +71,9 @@ export default function Otp() {
       title="Verify your email"
       subtitle={`We sent a code to ${email}`}
       footer={
-        <Link to="/register" className="text-primary font-medium hover:underline">
+        <Link to="/login" className="text-primary font-medium hover:underline">
           <ArrowLeft className="w-3 h-3 inline mr-1" />
-          Back to sign up
+          Back to log in
         </Link>
       }
     >

@@ -43,14 +43,7 @@ export default function Login() {
       icon={LogIn}
       title={t('auth.welcome_back')}
       subtitle={t('auth.login_subtitle')}
-      footer={
-        <>
-          {t('auth.no_account')}{" "}
-          <Link to="/register" className="text-primary font-medium hover:underline">
-            {t('auth.create_one')}
-          </Link>
-        </>
-      }
+      
     >
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">

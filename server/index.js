@@ -118,30 +118,8 @@ app.patch('/api/auth/me', async (req, res) => {
   return res.json(safe);
 });
 
-app.post('/api/auth/register', async (req, res) => {
-  const { email, password, name, role } = req.body;
-  const users = await db.list('User', '-created_date', 500, 0);
-  const existing = users.find(u => u.email?.toLowerCase() === email?.toLowerCase());
-  if (existing) {
-    return res.status(400).json({ message: 'User with this email already exists' });
-  }
-
-  const newUser = await db.create('User', {
-    email,
-    password: password || 'password123',
-    name: name || email.split('@')[0],
-    role: role || 'user',
-    party_id: MAYRA_PARTY_ID,
-    access_role: 'CLIENT_USER',
-    client_account_id: MAYRA_MAIN_ACCOUNT_ID
-  });
-
-  const token = `local-token-${newUser.id}`;
-  const { password: _, ...userSafe } = newUser;
-  return res.json({
-    user: userSafe,
-    access_token: token
-  });
+app.post('/api/auth/register', async (_req, res) => {
+  return res.status(403).json({ message: 'Public registration is disabled. Please contact your administrator.' });
 });
 
 app.post('/api/auth/verify-otp', async (req, res) => {
